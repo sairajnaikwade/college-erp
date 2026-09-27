@@ -1,0 +1,366 @@
+@import "tailwindcss";
+
+/*
+ * College ERP — Design System
+ * ===========================
+ * Custom properties for consistent theming across the application.
+ * Uses HSL values for easy manipulation.
+ */
+
+@theme {
+  /* ─── Brand Colors ──────────────────────────────── */
+  --color-primary-50: #eff6ff;
+  --color-primary-100: #dbeafe;
+  --color-primary-200: #bfdbfe;
+  --color-primary-300: #93c5fd;
+  --color-primary-400: #60a5fa;
+  --color-primary-500: #3b82f6;
+  --color-primary-600: #2563eb;
+  --color-primary-700: #1d4ed8;
+  --color-primary-800: #1e40af;
+  --color-primary-900: #1e3a8a;
+
+  --color-accent-50: #f0fdf4;
+  --color-accent-100: #dcfce7;
+  --color-accent-200: #bbf7d0;
+  --color-accent-300: #86efac;
+  --color-accent-400: #4ade80;
+  --color-accent-500: #22c55e;
+  --color-accent-600: #16a34a;
+  --color-accent-700: #15803d;
+  --color-accent-800: #166534;
+  --color-accent-900: #14532d;
+
+  /* ─── Neutral / Slate ───────────────────────────── */
+  --color-surface-50: #f8fafc;
+  --color-surface-100: #f1f5f9;
+  --color-surface-200: #e2e8f0;
+  --color-surface-300: #cbd5e1;
+  --color-surface-400: #94a3b8;
+  --color-surface-500: #64748b;
+  --color-surface-600: #475569;
+  --color-surface-700: #334155;
+  --color-surface-800: #1e293b;
+  --color-surface-900: #0f172a;
+
+  /* ─── Semantic Colors ───────────────────────────── */
+  --color-danger-500: #ef4444;
+  --color-danger-600: #dc2626;
+  --color-warning-500: #f59e0b;
+  --color-warning-600: #d97706;
+  --color-info-500: #06b6d4;
+  --color-info-600: #0891b2;
+
+  /* ─── Academic Portal Theme Extras ──────────────── */
+  --color-portal-navy: #1e3a8a;
+  --color-portal-gold: #d97706;
+  --color-portal-card-bg: #ffffff;
+  --color-portal-accent-blue: #0284c7;
+
+  /* ─── Spacing ───────────────────────────────────── */
+  --sidebar-width: 250px;
+  --sidebar-collapsed-width: 70px;
+  --topnav-height: 56px;
+  --identity-bar-height: 48px;
+
+  /* ─── Shadows ───────────────────────────────────── */
+  --shadow-card: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+  --shadow-card-hover: 0 4px 12px -2px rgba(30, 58, 138, 0.08), 0 2px 6px -2px rgba(0, 0, 0, 0.04);
+  --shadow-dropdown: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  --shadow-portal-card: 0 2px 8px -2px rgba(15, 23, 42, 0.06), 0 1px 3px -1px rgba(15, 23, 42, 0.04);
+
+  /* ─── Radius ────────────────────────────────────── */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+}
+
+/* ─── Base Styles ─────────────────────────────────── */
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background-color: var(--color-surface-50);
+    color: var(--color-surface-800);
+    line-height: 1.6;
+  }
+}
+
+/* ─── Scrollbar Styling ───────────────────────────── */
+@layer base {
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--color-surface-300);
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-surface-400);
+  }
+}
+
+/* ─── Login Page Animations ──────────────────────── */
+
+/* === Base Keyframes === */
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95) translateY(8px); }
+  to   { opacity: 1; transform: scale(1)    translateY(0);    }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%      { transform: translateX(-4px); }
+  40%      { transform: translateX(4px); }
+  60%      { transform: translateX(-3px); }
+  80%      { transform: translateX(3px); }
+}
+
+/* === Staggered Entrance — slide up + fade in === */
+@keyframes loginSlideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+@keyframes loginSlideRight {
+  from { opacity: 0; transform: translateX(-18px); }
+  to   { opacity: 1; transform: translateX(0);     }
+}
+
+/* Left panel — staggered entrance (6 stages) */
+.login-anim-stagger-1 { opacity: 0; animation: loginSlideUp 0.5s ease-out 0.1s both; }
+.login-anim-stagger-2 { opacity: 0; animation: loginSlideUp 0.5s ease-out 0.2s both; }
+.login-anim-stagger-3 { opacity: 0; animation: loginSlideUp 0.5s ease-out 0.35s both; }
+.login-anim-stagger-4 { opacity: 0; animation: loginSlideUp 0.5s ease-out 0.45s both; }
+.login-anim-stagger-5 { opacity: 0; animation: loginSlideUp 0.6s ease-out 0.55s both; }
+.login-anim-stagger-6 { opacity: 0; animation: loginSlideUp 0.4s ease-out 0.7s both; }
+
+/* Right panel — staggered entrance (5 stages) */
+.login-anim-right-1 { opacity: 0; animation: loginSlideUp 0.5s ease-out 0.15s both; }
+.login-anim-right-2 { opacity: 0; animation: loginSlideUp 0.45s ease-out 0.3s both; }
+.login-anim-right-3 { opacity: 0; animation: loginSlideUp 0.5s ease-out 0.4s both; }
+.login-anim-right-4 { opacity: 0; animation: loginSlideUp 0.45s ease-out 0.55s both; }
+.login-anim-right-5 { opacity: 0; animation: loginSlideUp 0.4s ease-out 0.65s both; }
+
+/* === Individual stat items — pop in === */
+@keyframes statPopIn {
+  from { opacity: 0; transform: scale(0.8) translateY(8px); }
+  to   { opacity: 1; transform: scale(1)   translateY(0);   }
+}
+
+.login-anim-stat-item {
+  opacity: 0;
+  animation: statPopIn 0.4s ease-out both;
+  /* animation-delay set inline per item */
+}
+
+/* Stat icon hover micro-bounce */
+.login-anim-stat-icon {
+  transition: transform 0.2s ease;
+}
+.login-anim-stat-icon:hover {
+  transform: translateY(-2px);
+}
+
+/* === Crest emblem bounce-in === */
+@keyframes crestBounce {
+  0%   { opacity: 0; transform: scale(0.5) translateY(10px); }
+  60%  { opacity: 1; transform: scale(1.08); }
+  80%  { transform: scale(0.96); }
+  100% { transform: scale(1); }
+}
+
+.login-anim-crest-bounce {
+  animation: crestBounce 0.6s ease-out 0.15s both;
+}
+
+/* === Hero highlight shimmer === */
+@keyframes heroHighlight {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.login-anim-hero-highlight {
+  background: linear-gradient(
+    90deg,
+    #2563eb 0%,
+    #60a5fa 40%,
+    #2563eb 60%,
+    #1d4ed8 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: heroHighlight 4s linear 1s infinite;
+}
+
+/* === Campus photo subtle zoom === */
+@keyframes campusZoom {
+  from { transform: scale(1.08); }
+  to   { transform: scale(1);    }
+}
+
+.login-anim-campus-zoom {
+  animation: campusZoom 1.2s ease-out 0.5s both;
+}
+
+/* === Floating decorative elements === */
+@keyframes floatSlow {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(-8px) rotate(1deg); }
+}
+
+@keyframes floatSlower {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(6px) rotate(-1deg); }
+}
+
+.login-anim-float-slow {
+  animation: floatSlow 6s ease-in-out infinite;
+}
+
+.login-anim-float-slower {
+  animation: floatSlower 8s ease-in-out infinite;
+}
+
+/* === Ambient glow drift === */
+@keyframes glowDrift {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.15; }
+  50%      { transform: translate(20px, 10px) scale(1.1); opacity: 0.2; }
+}
+
+@keyframes glowDriftReverse {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.1; }
+  50%      { transform: translate(-15px, -8px) scale(1.08); opacity: 0.15; }
+}
+
+.login-anim-glow-drift {
+  animation: glowDrift 10s ease-in-out infinite;
+}
+
+.login-anim-glow-drift-reverse {
+  animation: glowDriftReverse 12s ease-in-out infinite;
+}
+
+/* === Arrow nudge on sign-in button === */
+@keyframes arrowNudge {
+  0%, 70%, 100% { transform: translateX(0); }
+  80%           { transform: translateX(3px); }
+  90%           { transform: translateX(0); }
+}
+
+.login-anim-arrow-nudge {
+  animation: arrowNudge 2.5s ease-in-out 1.5s infinite;
+}
+
+/* ─── Login Success Transition ───────────────────── */
+@keyframes transitionOverlayIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes transitionContentIn {
+  from { opacity: 0; transform: scale(0.92) translateY(12px); }
+  to   { opacity: 1; transform: scale(1)    translateY(0);    }
+}
+
+@keyframes spinnerRotate {
+  to { transform: rotate(360deg); }
+}
+
+.login-transition-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #eff6ff 0%, #ffffff 50%, #f0f9ff 100%);
+  animation: transitionOverlayIn 0.3s ease-out both;
+}
+
+.login-transition-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  animation: transitionContentIn 0.4s ease-out 0.1s both;
+}
+
+.login-transition-spinner {
+  width: 24px;
+  height: 24px;
+  border: 2.5px solid #e2e8f0;
+  border-top-color: #2563eb;
+  border-radius: 50%;
+  animation: spinnerRotate 0.7s linear infinite;
+}
+
+/* ─── Reduced Motion ─────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .login-anim-stagger-1,
+  .login-anim-stagger-2,
+  .login-anim-stagger-3,
+  .login-anim-stagger-4,
+  .login-anim-stagger-5,
+  .login-anim-stagger-6,
+  .login-anim-right-1,
+  .login-anim-right-2,
+  .login-anim-right-3,
+  .login-anim-right-4,
+  .login-anim-right-5,
+  .login-anim-stat-item,
+  .login-anim-crest-bounce,
+  .login-anim-campus-zoom {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .login-anim-hero-highlight {
+    animation: none !important;
+    background: none !important;
+    -webkit-text-fill-color: #2563eb !important;
+  }
+
+  .login-anim-float-slow,
+  .login-anim-float-slower,
+  .login-anim-glow-drift,
+  .login-anim-glow-drift-reverse,
+  .login-anim-arrow-nudge {
+    animation: none !important;
+  }
+
+  .login-transition-overlay {
+    animation: none;
+    opacity: 1;
+  }
+
+  .login-transition-content {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .login-transition-spinner {
+    animation: spinnerRotate 1.4s linear infinite;
+  }
+}
+

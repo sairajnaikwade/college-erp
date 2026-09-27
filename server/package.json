@@ -1,0 +1,51 @@
+{
+  "name": "college-erp-server",
+  "version": "1.0.0",
+  "description": "College ERP API Server",
+  "private": true,
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "migrate:up": "tsx src/database/migrator.ts up",
+    "migrate:down": "tsx src/database/migrator.ts down",
+    "migrate:status": "tsx src/database/migrator.ts status",
+    "db:seed": "tsx src/database/seeds/initial_seed.ts",
+    "test": "tsx src/tests/academic.test.ts && tsx src/tests/notice.test.ts && tsx src/tests/timetable.test.ts && tsx src/tests/attendance.test.ts && tsx src/tests/assignment.test.ts && tsx src/tests/note.test.ts && tsx src/tests/quiz.test.ts && tsx src/tests/marks.test.ts && tsx src/tests/reports.test.ts",
+    "test:academic": "tsx src/tests/academic.test.ts",
+    "test:notices": "tsx src/tests/notice.test.ts",
+    "test:timetable": "tsx src/tests/timetable.test.ts",
+    "test:attendance": "tsx src/tests/attendance.test.ts",
+    "test:assignment": "tsx src/tests/assignment.test.ts",
+    "test:notes": "tsx src/tests/note.test.ts",
+    "test:quiz": "tsx src/tests/quiz.test.ts",
+    "test:marks": "tsx src/tests/marks.test.ts",
+    "test:reports": "tsx src/tests/reports.test.ts"
+  },
+  "dependencies": {
+    "@types/multer": "^2.2.0",
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.0",
+    "helmet": "^8.0.0",
+    "jsonwebtoken": "^9.0.3",
+    "morgan": "^1.10.0",
+    "multer": "^2.4.0",
+    "pg": "^8.13.1",
+    "uuid": "^11.0.5"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/morgan": "^1.9.9",
+    "@types/node": "^22.10.5",
+    "@types/pg": "^8.11.10",
+    "@types/uuid": "^10.0.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3"
+  }
+}
