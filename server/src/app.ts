@@ -13,8 +13,12 @@ const app = express();
 app.use(helmet());
 
 // ─── CORS ────────────────────────────────────────────────
+const allowedOrigins = env.clientUrl.includes(',')
+  ? env.clientUrl.split(',').map((url) => url.trim().replace(/\/$/, ''))
+  : env.clientUrl.trim().replace(/\/$/, '');
+
 app.use(cors({
-  origin: env.clientUrl,
+  origin: allowedOrigins,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],

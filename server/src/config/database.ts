@@ -29,8 +29,14 @@ export function getPool(): Pool {
       connectionTimeoutMillis: 5000,
     };
 
-    // In production, require SSL
-    if (env.isProduction) {
+    // In production or when connecting to SSL-enabled cloud database (such as Supabase)
+    const requiresSsl =
+      env.isProduction ||
+      env.databaseUrl.includes('supabase.co') ||
+      env.databaseUrl.includes('pooler.supabase.com') ||
+      env.databaseUrl.includes('sslmode=require');
+
+    if (requiresSsl) {
       config.ssl = { rejectUnauthorized: false };
     }
 
