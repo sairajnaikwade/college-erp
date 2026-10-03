@@ -76,7 +76,7 @@ class TelemetryService {
     if (['LOGIN_SUCCESS', 'LOGIN_FAILURE', 'LOGOUT'].includes(event.event_type)) {
       socCopilotService.sendSecurityEvent(event).catch((err) => {
         logger.warn(
-          `[SOC CoPilot] Async dispatch error for ${event.event_type}: ${err instanceof Error ? err.message : 'Unknown'}`
+          `[SOC] Async dispatch error for ${event.event_type}: ${err instanceof Error ? err.message : 'Unknown'}`
         );
       });
     }
