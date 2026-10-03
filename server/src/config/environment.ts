@@ -14,6 +14,11 @@ export interface EnvironmentConfig {
   bcryptSaltRounds: number;
   isProduction: boolean;
   isDevelopment: boolean;
+  socEnabled: boolean;
+  socCopilotUrl: string;
+  socCopilotApiKey: string;
+  socCopilotSecret: string;
+  socCopilotWebsiteId: string;
 }
 
 function getEnvVariable(key: string, fallback?: string): string {
@@ -33,6 +38,13 @@ export const env: EnvironmentConfig = {
   jwtExpiresIn: getEnvVariable('JWT_EXPIRES_IN', '24h'),
   bcryptSaltRounds: parseInt(getEnvVariable('BCRYPT_SALT_ROUNDS', '10'), 10),
 
+  // SOC CoPilot Integration
+  socEnabled: process.env.SOC_ENABLED === 'true',
+  socCopilotUrl: process.env.SOC_COPILOT_URL || '',
+  socCopilotApiKey: process.env.SOC_COPILOT_API_KEY || '',
+  socCopilotSecret: process.env.SOC_COPILOT_SECRET || '',
+  socCopilotWebsiteId: process.env.SOC_COPILOT_WEBSITE_ID || 'WEB-003',
+
   get isProduction() {
     return this.nodeEnv === 'production';
   },
@@ -40,3 +52,4 @@ export const env: EnvironmentConfig = {
     return this.nodeEnv === 'development';
   },
 };
+

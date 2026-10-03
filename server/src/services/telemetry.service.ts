@@ -8,6 +8,7 @@ import {
   ResourceType,
   UserRole,
 } from '../types/security-events';
+import { socCopilotService } from './socCopilot.service';
 
 export interface EmitEventParams {
   eventType: SecurityEventType;
@@ -69,6 +70,15 @@ class TelemetryService {
       logger.warn(logPrefix, JSON.stringify(event));
     } else {
       logger.info(logPrefix, JSON.stringify(event));
+    }
+
+    // Forward to SOC CoPilot (non-blocking, fail-safe async dispatch)
+    if (['LOGIN_SUCCESS', 'LOGIN_FAILURE', 'LOGOUT'].includes(event.event_type)) {
+      socCopilotService.sendSecurityEvent(event).catch((err) => {
+        logger.warn(
+          `[SOC CoPilot] Async dispatch error for ${event.event_type}: ${err instanceof Error ? err.message : 'Unknown'}`
+        );
+      });
     }
 
     return event;
