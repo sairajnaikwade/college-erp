@@ -87,7 +87,7 @@ export class SocCopilotService {
       const baseUrl = env.socCopilotUrl;
       const apiKey = env.socCopilotApiKey;
       const secret = env.socCopilotSecret;
-      const websiteId = env.socCopilotWebsiteId || 'WEB-003';
+      const websiteId = env.socCopilotWebsiteId || 'WEB-001';
 
       if (!baseUrl || !apiKey || !secret) {
         logger.warn(

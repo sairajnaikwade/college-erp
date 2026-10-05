@@ -80,7 +80,7 @@ export const env: EnvironmentConfig = {
     return (process.env.SOC_COPILOT_SECRET || '').trim();
   },
   get socCopilotWebsiteId(): string {
-    return (process.env.SOC_COPILOT_WEBSITE_ID || 'WEB-003').trim();
+    return (process.env.SOC_COPILOT_WEBSITE_ID || 'WEB-001').trim();
   },
 
   get isProduction() {
