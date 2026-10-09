@@ -9,6 +9,7 @@ import {
   UserRole,
 } from '../types/security-events';
 import { socCopilotService } from './socCopilot.service';
+import { extractClientIp } from '../utils/client-ip';
 
 export interface EmitEventParams {
   eventType: SecurityEventType;
@@ -40,10 +41,7 @@ class TelemetryService {
       metadata = {},
     } = params;
 
-    const sourceIp = req
-      ? (req.headers['x-forwarded-for'] as string) || req.socket.remoteAddress || '127.0.0.1'
-      : '127.0.0.1';
-
+    const sourceIp = extractClientIp(req);
     const userAgent = req ? req.headers['user-agent'] || 'unknown' : 'internal';
     const endpoint = req ? req.originalUrl || req.url : '/';
     const method = req ? req.method : 'INTERNAL';
@@ -58,7 +56,7 @@ class TelemetryService {
       endpoint,
       method,
       result,
-      ip_address: sourceIp.replace('::ffff:', ''),
+      ip_address: sourceIp,
       user_agent: userAgent,
       timestamp: new Date().toISOString(),
       metadata,

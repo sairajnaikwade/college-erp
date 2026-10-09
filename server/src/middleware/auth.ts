@@ -2,14 +2,17 @@ import { Response, NextFunction } from 'express';
 import { ApiError } from '../utils/api-error';
 import { verifyToken } from '../utils/token';
 import { userRepository } from '../repositories/user.repository';
+import { ipBlocklistRepository } from '../repositories/ip-blocklist.repository';
 import { telemetryService } from '../services/telemetry.service';
+import { extractClientIp } from '../utils/client-ip';
+import { env } from '../config/environment';
 import {
   AuthenticatedRequest,
 } from '../types/common';
 import { UserRole } from '../types/security-events';
 
 /**
- * Authentication middleware — verifies JWT and session validity.
+ * Authentication middleware — verifies JWT, IP blocklist, and session validity.
  */
 export async function authenticate(
   req: AuthenticatedRequest,
@@ -17,6 +20,29 @@ export async function authenticate(
   next: NextFunction
 ): Promise<void> {
   try {
+    // 1. IP Blocklist Enforcement Gate
+    const clientIp = extractClientIp(req);
+    const websiteId = env.socCopilotWebsiteId || 'WEB-001';
+    const activeBlock = await ipBlocklistRepository.findActiveBlock(clientIp, websiteId);
+
+    if (activeBlock) {
+      telemetryService.emit({
+        eventType: 'UNAUTHORIZED_ACCESS_ATTEMPT',
+        result: 'DENIED',
+        req,
+        metadata: {
+          reason: 'IP_BLOCKED',
+          blockedIp: clientIp,
+          blockReason: activeBlock.reason,
+          expiresAt: activeBlock.expires_at,
+          sourceIncidentId: activeBlock.source_incident_id,
+        },
+      });
+      throw ApiError.forbidden(
+        `Access from this IP address (${clientIp}) is temporarily blocked due to security policy. (Expires: ${activeBlock.expires_at.toISOString()})`
+      );
+    }
+
     const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {

@@ -16,12 +16,16 @@ import quizRoutes from './quiz.routes';
 import marksRoutes from './marks.routes';
 import resultsRoutes from './results.routes';
 import reportsRoutes from './reports.routes';
+import socEnforcementRoutes from './socEnforcement.routes';
 
 const router = Router();
 
 // ─── Health & Authentication ──────────────────────────────
 router.use('/', healthRoutes);
 router.use('/auth', authRoutes);
+
+// ─── SOC CoPilot Enforcement Webhook ───────────────────────
+router.use('/soc/enforce', socEnforcementRoutes);
 
 // ─── Academic Structure & Management ──────────────────────
 router.use('/departments', departmentRoutes);

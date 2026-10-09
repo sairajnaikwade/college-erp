@@ -1,6 +1,7 @@
 import { Request } from 'express';
 import { userRepository, UserWithProfile } from '../repositories/user.repository';
 import { sessionRepository } from '../repositories/session.repository';
+import { ipBlocklistRepository } from '../repositories/ip-blocklist.repository';
 import { verifyPassword } from '../utils/password';
 import {
   generateToken,
@@ -9,6 +10,8 @@ import {
 } from '../utils/token';
 import { ApiError } from '../utils/api-error';
 import { telemetryService } from './telemetry.service';
+import { extractClientIp } from '../utils/client-ip';
+import { env } from '../config/environment';
 
 export interface LoginParams {
   identifier: string;
@@ -38,6 +41,30 @@ export class AuthService {
    */
   public async login(params: LoginParams): Promise<LoginResult> {
     const { identifier, password, role, req } = params;
+
+    // 1. IP Blocklist Enforcement Gate
+    const clientIp = extractClientIp(req);
+    const websiteId = env.socCopilotWebsiteId || 'WEB-001';
+    const activeBlock = await ipBlocklistRepository.findActiveBlock(clientIp, websiteId);
+
+    if (activeBlock) {
+      telemetryService.emit({
+        eventType: 'LOGIN_FAILURE',
+        result: 'DENIED',
+        req,
+        metadata: {
+          reason: 'IP_BLOCKED',
+          blockedIp: clientIp,
+          blockReason: activeBlock.reason,
+          expiresAt: activeBlock.expires_at,
+          sourceIncidentId: activeBlock.source_incident_id,
+          initiator: activeBlock.initiator,
+        },
+      });
+      throw ApiError.forbidden(
+        `Access from this IP address (${clientIp}) is temporarily blocked due to security policy. (Expires: ${activeBlock.expires_at.toISOString()})`
+      );
+    }
 
     if (!identifier || !password) {
       throw ApiError.badRequest('Email/Username and password are required.');
@@ -130,10 +157,7 @@ export class AuthService {
     const tokenHash = hashToken(sessionSecret);
     const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
 
-    const ipAddress =
-      (req.headers['x-forwarded-for'] as string) ||
-      req.socket.remoteAddress ||
-      undefined;
+    const ipAddress = clientIp;
     const userAgent = req.headers['user-agent'];
 
     const session = await sessionRepository.createSession({
