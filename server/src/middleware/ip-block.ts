@@ -38,7 +38,7 @@ export async function checkIpBlock(
       });
 
       throw ApiError.forbidden(
-        `Access from this IP address (${clientIp}) is temporarily blocked due to security policy. Expires: ${activeBlock.expires_at.toISOString()}`
+        'Access is temporarily restricted due to security policy.'
       );
     }
 
